@@ -1,0 +1,35 @@
+name: Build the project
+
+on:
+  push:
+    branches:
+      - main # Triggers workflow on pushes to the main branch
+  pull_request:
+    branches:
+      - dev # Triggers workflow on pull requests targeting the qa branch
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Use a Linux virtual machine
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x" # Specify the .NET version
+
+      - name: Build the project
+        run: |
+          dotnet restore
+          dotnet publish -c Release -o ./publish
+
+      - name: Deploy to Azure App Service
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: "grupp-arbete-app-service"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: "./publish"
