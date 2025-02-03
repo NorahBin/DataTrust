@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Security.Claims;
-
+//
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(options =>
