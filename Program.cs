@@ -88,6 +88,16 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+// Retrieve the Application Insights Connection String from Key Vault
+var appInsightsConnectionString = builder.Configuration["ApplicationInsights--ConnectionString"];
+
+// Configure Application Insights using the Connection String
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = appInsightsConnectionString;
+});
+
 var newtonUri = new Uri("https://grupparbete-keyvault.vault.azure.net/");
 
 builder.Configuration.AddAzureKeyVault(newtonUri, new DefaultAzureCredential());
@@ -100,6 +110,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AccessControl>();
+
+//builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 
